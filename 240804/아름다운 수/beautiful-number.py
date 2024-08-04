@@ -3,7 +3,7 @@ answer = 0
 
 def check(num):
     i = 0
-    while i < len(num):
+    while i < n:
         cnt = 1
         while i + 1 < n and num[i] == num[i + 1]:
             i += 1
