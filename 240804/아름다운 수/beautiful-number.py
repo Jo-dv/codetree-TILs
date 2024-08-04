@@ -10,7 +10,6 @@ def check(num):
             cnt += 1
         if cnt % int(num[i]) != 0:
             return False
-        i += int(num[i])
     return True
 
 def dfs(num):
