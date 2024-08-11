@@ -9,7 +9,7 @@ def search(idx):
     if idx == n:
         for i, line1 in enumerate(selected_lines):
             for j, line2 in enumerate(selected_lines):
-                if i < j and line1[0] <= line2[1] and line2[0] <= line1[1]:
+                if i != j and line1[0] <= line2[1] and line2[0] <= line1[1]:
                     return
         answer = max(answer, len(selected_lines))
         return
