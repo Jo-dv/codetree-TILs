@@ -9,13 +9,9 @@ def search(idx):
     if idx == n:
         for i, line1 in enumerate(selected_lines):
             for j, line2 in enumerate(selected_lines):
-                if j >= i:
-                    if len(selected_lines) == 1:
-                        answer = 1
-                    elif line1[1] < line2[0] or line2[1] < line1[0]:  # 겹치지 않은 경우 
-                        answer = max(answer, len(selected_lines))
-                    else:
-                        continue
+                if i < j and line1[0] <= line2[1] and line2[0] <= line1[1]:
+                    return
+        answer = max(answer, len(selected_lines))
         return
 
     selected_lines.append(lines[idx])    
