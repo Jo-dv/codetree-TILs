@@ -8,8 +8,12 @@ def search(idx):
     if idx == n:
         for i, line1 in enumerate(selected_lines):
             for j, line2 in enumerate(selected_lines):
-                if j > i and(line1[1] < line2[0] or line2[1] < line1[0]):  # 겹치지 않은 경우 
-                    answer = max(answer, len(selected_lines))
+                if j > i:
+                    if line1[1] < line2[0] or line2[1] < line1[0]:  # 겹치지 않은 경우 
+                        answer = max(answer, len(selected_lines))
+                    else:
+                        return
+
         return
 
     selected_lines.append(lines[idx])    
