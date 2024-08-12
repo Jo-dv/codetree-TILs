@@ -10,7 +10,9 @@ def dfs(y, x):
         visited[y][x] = True
         dfs(y + 1, x)
         dfs(y, x + 1)
+        return True
 
     return False
+
 
 print(1 if dfs(0, 0) else 0)
