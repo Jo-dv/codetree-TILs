@@ -42,7 +42,8 @@ for i in range(n):
             if search(i, j, grid[i][j]):
                 max_block_size = max(max_block_size, current_block_size)
             if current_block_size >= 4:
-                explode()
-                down_block()
+                block += 1
+                # explode()
+                # down_block()
 
 print(block, max_block_size)
