@@ -26,7 +26,7 @@ def dfs2(y, x):
         return True
     return False
 
-for k in range(1, max_k + 1):
+for k in range(1, max_k):
     area = 0
     visited = [[False] * m for _ in range(n)]
     for i in range(n):
