@@ -4,9 +4,11 @@ block = 0
 max_block_size = 0
 
 def search(y, x, target):
+    global current_block_size
     if 0 <= y < n and 0 <= x < n and not visited[y][x] and grid[y][x] == target:
         visited[y][x] = True
         block_list.append((y, x))
+        current_block_size += 1
         search(y - 1, x, target)
         search(y + 1, x, target)
         search(y, x - 1, target)
@@ -34,8 +36,9 @@ for i in range(n):
         if grid[i][j] != 0:
             block_list = []
             visited = [[False] * n for _ in range(n)]
+            current_block_size = 0
             if search(i, j, grid[i][j]):
-                max_block_size = max(max_block_size, len(block_list))
+                max_block_size = max(max_block_size, current_block_size)
             if len(block_list) >= 4:
                 explode()
                 down_block()
