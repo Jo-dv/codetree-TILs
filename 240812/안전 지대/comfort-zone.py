@@ -1,3 +1,6 @@
+import sys
+sys.maxrecursion_limit = 10**5
+
 n, m = map(int, input().split())
 grid = [list(map(int, input().split())) for _ in range(n)]
 max_k = max(max(i) for i in grid)
