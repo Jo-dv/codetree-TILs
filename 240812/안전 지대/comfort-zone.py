@@ -1,7 +1,7 @@
 n, m = map(int, input().split())
 grid = [list(map(int, input().split())) for _ in range(n)]
 max_k = max(max(i) for i in grid)
-answer = [0, 0]
+answer = [1, 0]
 
 def dfs(y, x, k):
     if 0 <= y < n and 0 <= x < m and not visited[y][x] and grid[y][x] <= k:
