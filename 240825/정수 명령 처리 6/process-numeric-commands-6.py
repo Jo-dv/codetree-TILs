@@ -14,4 +14,4 @@ for c in cmd:
     elif c[0] == "empty":
         print(0 if len(hq) else 1)
     else:
-        print(hq[0])
+        print(hq[0][1])
