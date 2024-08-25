@@ -7,8 +7,7 @@ nums = list(map(int, input().split()))
 answer = 0.
 
 for k in range(1, n - 1):
-    removed_nums = nums[k:]
-    temp = removed_nums.copy()
+    temp = nums[k:]
     heapq.heapify(temp)
     heapq.heappop(temp)
     answer = max(answer, sum(temp) / len(temp))
