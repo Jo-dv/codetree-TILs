@@ -5,11 +5,10 @@ hq = []
 n = int(input())
 nums = list(map(int, input().split()))
 answer = 0.
+heapq.heapify(nums)
 
 for k in range(1, n - 1):
-    temp = nums[k:]
-    heapq.heapify(temp)
-    heapq.heappop(temp)
-    answer = max(answer, sum(temp) / len(temp))
+    heapq.heappop(nums)
+    answer = max(answer, sum(nums) / len(nums))
 
 print('{:.2f}'.format(answer))
