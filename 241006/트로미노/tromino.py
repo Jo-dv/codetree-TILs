@@ -1,6 +1,6 @@
 n, m = map(int, input().split())
-grid = [list(map(int, input().split())) for _ in range(m)]
-visited = [[False] * n for _ in range(m)]
+grid = [list(map(int, input().split())) for _ in range(n)]
+visited = [[False] * m for _ in range(n)]
 directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 answer = 0
 
@@ -18,7 +18,7 @@ def set_block(y, x, size, value):
             visited[my][mx] = False
 
 for y in range(n):
-    for x in range(n):
+    for x in range(m):
         visited[y][x] = True
         set_block(y, x, 1, grid[y][x])
         visited[y][x] = False
