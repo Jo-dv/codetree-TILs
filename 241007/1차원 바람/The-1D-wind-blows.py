@@ -16,7 +16,7 @@ def wind(r, d):
 
 for cmd in command:
     r, d = cmd
-    r -= 1
+    r = int(r) - 1
     d = 1 if d == 'L' else - 1
     wind(r, d)
 
