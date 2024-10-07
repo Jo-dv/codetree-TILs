@@ -11,5 +11,5 @@ for i in range(len(belt) - 1, 0, -1):
 
 belt[0] = temp
 
-for i in range(0, len(belt), 3):
-    print(*belt[i:i + 3])
+for i in range(0, len(belt), n):
+    print(*belt[i:i + n])
