@@ -31,7 +31,6 @@ class Main:
             elif distance == min_distance:
                 distances.append((sy, sx, santa))
         distances.sort(reverse=True)
-
         return distances[0]
 
     def move_rudolph(self, turn):
@@ -102,6 +101,7 @@ class Main:
                 self.santas[santa] = [my, mx]
 
     def init_board(self):
+        self.alive[0] = False
         for santa in range(1, self.p + 1):  # 산타 위치
             sy, sx = self.santas[santa]
             self.board[sy][sx] = santa
