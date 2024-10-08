@@ -27,13 +27,13 @@ class Main:
             distance = self.cal_distance(self.y, self.x, sy, sx)
             if distance <= min_distance:
                 min_distance = distance
-                distances.append((sy, sx, santa))
-        distances.sort(reverse=True)
+                distances.append((min_distance, sy, sx, santa))
+        distances.sort(key=lambda x: (x[0], -x[1], -x[2]))
         return distances[0]
 
     def move_rudolph(self, turn):
         closest_santa = self.find_santa()
-        sy, sx, santa = closest_santa
+        _, sy, sx, santa = closest_santa
 
         dy, dx = 0, 0
         if self.y < sy:
