@@ -79,7 +79,7 @@ class Main:
     def move_santa(self, turn, santa):
         sy, sx = self.santas[santa]
         distances = []
-        min_distance = self.cal_distance(self.y, self.x, sy, sx)
+        min_distance = 2 * self.n**2
 
         for dy, dx in ((-1, 0), (0, 1), (1, 0), (0, -1)):
             my, mx = sy + dy, sx + dx
