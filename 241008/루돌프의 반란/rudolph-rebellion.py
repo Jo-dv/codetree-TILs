@@ -25,10 +25,8 @@ class Main:
                 continue
             sy, sx = self.santas[santa]
             distance = self.cal_distance(self.y, self.x, sy, sx)
-            if distance < min_distance:
+            if distance <= min_distance:
                 min_distance = distance
-                distances = [(sy, sx, santa)]
-            elif distance == min_distance:
                 distances.append((sy, sx, santa))
         distances.sort(reverse=True)
         return distances[0]
@@ -79,7 +77,7 @@ class Main:
     def move_santa(self, turn, santa):
         sy, sx = self.santas[santa]
         distances = []
-        min_distance = 2 * self.n**2
+        min_distance = self.cal_distance(self.y, self.x, sy, sx)
 
         for dy, dx in ((-1, 0), (0, 1), (1, 0), (0, -1)):
             my, mx = sy + dy, sx + dx
