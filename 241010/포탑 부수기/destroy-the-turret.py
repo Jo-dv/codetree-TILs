@@ -17,38 +17,35 @@ class Main:
                     self.destroy[y][x] = True
 
     def find_weak(self):  # 약한 포탑 탐색
-        mn, mx_turn, si, sj = 5001, 0, -1, -1
-        for i in range(self.n):
-            for j in range(self.m):
-                if self.grid[i][j] <= 0:
-                    continue  # 포탑이 아니면 skip
-                # 공격자 선정 조건 (낮은 공격력 -> 최근 공격 -> 큰 행/열 합 -> 큰 열)
-                if mn > self.grid[i][j] or \
-                    (mn == self.grid[i][j] and mx_turn < self.recent[i][j]) or \
-                    (mn == self.grid[i][j] and mx_turn == self.recent[i][j] and si + sj < i + j) or \
-                    (mn == self.grid[i][j] and mx_turn == self.recent[i][j] and si + sj == i + j and sj < j):
-                    mn, mx_turn, si, sj = self.grid[i][j], self.recent[i][j], i, j  # si, sj가 공격자 위치
-        return si, sj  # 좌표만
+        result = []
+        min_atk = 5001
+        for y in range(self.n):
+            for x in range(self.m):
+                if not self.destroy[y][x]:
+                    if self.grid[y][x] <= min_atk:
+                        min_atk = self.grid[y][x]
+                        result.append((min_atk, self.recent[y][x], y + x, x, (y, x)))
 
-    def find_strong(self, step):  # 강한 포탑 탐색
-        mx, mn_turn, ei, ej = 0, step, self.n, self.m
-        for i in range(self.n):
-            for j in range(self.m):
-                if self.grid[i][j] <= 0:
-                    continue  # 포탑이 아니면 skip
-                # 수비자 선정 조건 (높은 공격력 -> 오래전 공격 -> 작은 행/열 합 -> 작은 열)
-                if mx < self.grid[i][j] or \
-                    (mx == self.grid[i][j] and mn_turn > self.recent[i][j]) or \
-                    (mx == self.grid[i][j] and mn_turn == self.recent[i][j] and ei + ej > i + j) or \
-                    (mx == self.grid[i][j] and mn_turn == self.recent[i][j] and ei + ej == i + j and ej > j):
-                    mx, mn_turn, ei, ej = self.grid[i][j], self.recent[i][j], i, j  # ei, ej가 수비자 위치
+        result.sort(key=lambda i: (i[0], -i[1], -i[2], -i[3]))
+        return result[0][-1]  # 좌표만
 
-        return ei, ej
+    def find_strong(self):  # 강한 포탑 탐색
+        result = []
+        max_atk = 0
+        for y in range(self.n):
+            for x in range(self.m):
+                if not self.destroy[y][x]:
+                    if self.grid[y][x] >= max_atk:
+                        max_atk = self.grid[y][x]
+                        result.append((max_atk, self.recent[y][x], y + x, x, (y, x)))
+
+        result.sort(key=lambda i: (-i[0], i[1], i[2], i[3]))
+        return result[0][-1]  # 좌표만
 
     def attack(self, step):  # 모든 포탑 탐색 후, 공격
         self.candidates = set()  # 새로운 공격이 수행될 때마다 초기화
         atk_y, atk_x = self.find_weak()
-        def_y, def_x = self.find_strong(step)
+        def_y, def_x = self.find_strong()
 
         self.grid[atk_y][atk_x] += (self.n + self.m)  # 공격력 보정
         self.recent[atk_y][atk_x] = step  # 공격 시점 갱신
@@ -76,7 +73,7 @@ class Main:
                     self.grid[y][x] = max(0, self.grid[y][x] - (damage // 2))
                     self.candidates.add((y, x))
 
-            for dy, dx in ((0, 1), (1, 0), (-1, 0), (0, -1)):
+            for dy, dx in ((0, 1), (1, 0), (0, -1), (-1, 0)):
                 my, mx = (y + dy) % self.n, (x + dx) % self.m
                 if not self.destroy[my][mx] and not visited[my][mx]:
                     visited[my][mx] = (y, x)
