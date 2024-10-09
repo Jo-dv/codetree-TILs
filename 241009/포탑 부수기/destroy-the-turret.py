@@ -4,7 +4,7 @@ from collections import deque
 class Main:
     def __init__(self):
         self.n, self.m, self.k = map(int, input().split())
-        self.grid = [list(map(int, input().split())) for _ in range(self.m)]
+        self.grid = [list(map(int, input().split())) for _ in range(self.n)]
         self.recent = [[0] * self.m for _ in range(self.n)]  # 마지막 공격 시점
         self.destroy = [[False] * self.m for _ in range(self.n)]  # 파괴된 포탑
         self.answer = 0
