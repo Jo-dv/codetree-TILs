@@ -55,7 +55,6 @@ class Main:
         self.candidates.add((def_y, def_x))
 
         if not self.leaser(atk_y, atk_x, def_y, def_x, damage):
-            pr
             self.bomb(atk_y, atk_x, def_y, def_x, damage)
 
     def leaser(self, atk_y, atk_x, def_y, def_x, damage):
