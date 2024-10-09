@@ -126,9 +126,6 @@ class Main:
         for i in self.grid:
             self.answer = max(self.answer, max(i))
 
-        for i in self.grid:
-            print(i)
-
         print(self.answer)
 
 
