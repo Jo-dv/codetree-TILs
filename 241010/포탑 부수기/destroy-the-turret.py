@@ -41,11 +41,11 @@ class Main:
         result.sort(key=lambda i: (-i[0], i[1], i[2], i[3]))
         return result[0][-1]  # 좌표만
 
-    def attack(self):  # 모든 포탑 탐색 후, 공격
+    def attack(self, step):  # 모든 포탑 탐색 후, 공격
         atk_y, atk_x = self.find_weak()
         def_y, def_x = self.find_strong()
         self.grid[atk_y][atk_x] += (self.n + self.m)  # 공격력 보정
-        self.recent[atk_y][atk_x] += 1  # 공격 시점 갱신
+        self.recent[atk_y][atk_x] = step  # 공격 시점 갱신
         damage = self.grid[atk_y][atk_x]  # 편의를 위한 공격력 변수
 
         visited = [[[] for _ in range(self.m)] for _ in range(self.n)]
@@ -107,15 +107,11 @@ class Main:
         self.init_game()
 
         for step in range(1, self.k + 1):
-            survivor = self.attack()
+            survivor = self.attack(step)
             self.check_destroy()
             if self.check_terminate():
                 break
             self.recover(survivor)
-
-            # for i in self.grid:
-            #     print(i)
-            # print()
 
         for i in self.grid:
             self.answer = max(self.answer, max(i))
