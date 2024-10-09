@@ -56,12 +56,12 @@ class Main:
         while dq:
             y, x = dq.popleft()
             if (y, x) == (def_y, def_x):
-                self.grid[y][x] -= damage
+                self.grid[y][x] = max(0, self.grid[y][x] - damage)
                 while True:
                     y, x = visited[y][x]
                     if (y, x) == (atk_y, atk_x):
                         return candidates
-                    self.grid[y][x] -= (damage // 2)
+                    self.grid[y][x] = max(0, self.grid[y][x] - (damage // 2))
                     candidates.add((y, x))
 
             for dy, dx in ((0, 1), (1, 0), (-1, 0), (0, -1)):
@@ -70,13 +70,14 @@ class Main:
                     visited[my][mx] = (y, x)
                     dq.append((my, mx))
 
+        candidates = {(atk_y, atk_x), (def_y, def_x)}
         y, x = def_y, def_x
-        self.grid[y][x] -= damage
+        self.grid[y][x] = max(0, self.grid[y][x] - damage)
         for dy, dx in ((0, 1), (1, 0), (-1, 0), (0, -1), (-1, -1), (-1, 1), (1, -1), (1, 1)):
             my, mx = (y + dy) % self.n, (x + dx) % self.m
             if (my, mx) == (atk_y, atk_x):  # 자기 자신은 범위에서 제외
                 continue
-            self.grid[my][mx] -= (damage // 2)
+            self.grid[my][mx] = max(0, self.grid[my][mx] - (damage // 2))
             candidates.add((my, mx))
 
         return candidates
@@ -84,12 +85,12 @@ class Main:
     def check_destroy(self):
         for y in range(self.n):
             for x in range(self.m):
-                if self.grid[y][x] <= 0:
+                if self.grid[y][x] == 0:
                     self.destroy[y][x] = True
 
     def recover(self, survivor):  # 무관한 포탑 회복
         for y in range(self.n):
-            for x in range(self.n):
+            for x in range(self.m):
                 if (y, x) not in survivor and not self.destroy[y][x]:
                     self.grid[y][x] += 1
 
@@ -111,6 +112,10 @@ class Main:
             if self.check_terminate():
                 break
             self.recover(survivor)
+
+            # for i in self.grid:
+            #     print(i)
+            # print()
 
         for i in self.grid:
             self.answer = max(self.answer, max(i))
