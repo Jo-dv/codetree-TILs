@@ -9,7 +9,7 @@ class Main:
 
     def init_maze(self):
         for y, x in self.people:
-            self.maze[y][x] = -1
+            self.maze[y][x] -= 1  # 같은 좌표인 사람들이 있음
 
         self.maze[self.exit_y][self.exit_x] = -99
         
@@ -77,12 +77,8 @@ class Main:
             self.move()
             if self.rest_people == 0:  # 이동 후, 모든 인원이 다 탈출했다면 종료
                 break
-            self.rotate()
 
-            # print(f"{step} start")
-            # for i in self.maze:
-            #     print(i)
-            # print(f"{step} done")
+            self.rotate()
 
         print(self.answer)
         print(self.exit_y + 1, self.exit_x + 1)
