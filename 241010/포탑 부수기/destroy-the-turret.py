@@ -18,7 +18,7 @@ class Main:
 
     def find_weak(self):  # 약한 포탑 탐색
         result = []
-        min_atk = 5001
+        min_atk = 5000
         for y in range(self.n):
             for x in range(self.m):
                 if not self.destroy[y][x]:
