@@ -43,15 +43,19 @@ class Main:
         return result[0][-1]  # 좌표만
 
     def attack(self, step):  # 모든 포탑 탐색 후, 공격
+        self.candidates = set()  # 새로운 공격이 수행될 때마다 초기화
         atk_y, atk_x = self.find_weak()
         def_y, def_x = self.find_strong()
+
         self.grid[atk_y][atk_x] += (self.n + self.m)  # 공격력 보정
         self.recent[atk_y][atk_x] = step  # 공격 시점 갱신
+
         damage = self.grid[atk_y][atk_x]  # 편의를 위한 공격력 변수
         self.candidates.add((atk_y, atk_x))
         self.candidates.add((def_y, def_x))
 
         if not self.leaser(atk_y, atk_x, def_y, def_x, damage):
+            pr
             self.bomb(atk_y, atk_x, def_y, def_x, damage)
 
     def leaser(self, atk_y, atk_x, def_y, def_x, damage):
@@ -72,12 +76,12 @@ class Main:
 
             for dy, dx in ((0, 1), (1, 0), (-1, 0), (0, -1)):
                 my, mx = (y + dy) % self.n, (x + dx) % self.m
-                if self.grid[my][mx] > 0 and not visited[my][mx]:
+                if not self.destroy[my][mx] and not visited[my][mx]:
                     visited[my][mx] = (y, x)
                     dq.append((my, mx))
 
         return False
-                    
+
     def bomb(self, atk_y, atk_x, def_y, def_x, damage):
         y, x = def_y, def_x
         self.grid[y][x] = max(0, self.grid[y][x] - damage)
@@ -121,6 +125,9 @@ class Main:
 
         for i in self.grid:
             self.answer = max(self.answer, max(i))
+
+        for i in self.grid:
+            print(i)
 
         print(self.answer)
 
