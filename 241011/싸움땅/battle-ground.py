@@ -41,12 +41,12 @@ class Main:
             self.gun_grid[y][x].sort()
         self.move_lose(loser)  # 패자 이동
 
-        if len(self.gun_grid[y][x]) > 0 and self.gun[winner] < self.gun_grid[y][x][-1]:  # 바닥에 총이 내거보다 좋으면 교환
+        if self.gun_grid[y][x] and self.gun[winner] < self.gun_grid[y][x][-1]:  # 바닥에 총이 내거보다 좋으면 교환
             put_gun = self.gun[winner]
             self.gun[winner] = self.gun_grid[y][x].pop()
             self.gun_grid[y][x].append(put_gun)
             self.gun_grid[y][x].sort()
-            # 소트
+            # 실패 요인: 총이 있는 상태에서만 교환 가능한 줄 알았음
 
     def fight(self, player, enemy, y, x):
         player_atk = self.players[player][3] + self.gun[player]
@@ -56,10 +56,8 @@ class Main:
             self.after_fight(player, enemy, y, x)
         elif player_atk == enemy_atk:
             if self.players[player][3] > self.players[enemy][3]:  # 주인공 승리
-                self.points[player] += abs(player_atk - enemy_atk)
                 self.after_fight(player, enemy, y, x)
             elif self.players[player][3] < self.players[enemy][3]:  # 상대방 승리
-                self.points[enemy] += abs(player_atk - enemy_atk)
                 self.after_fight(enemy, player, y, x)
         else:  # 상대방 승리
             self.points[enemy] += abs(player_atk - enemy_atk)
@@ -67,7 +65,7 @@ class Main:
 
     def get_gun(self, player, my, mx):
         self.gun_grid[my][mx].sort()  # 가장 강한 총을 줍기 위해
-        if len(self.gun_grid[my][mx]) > 0:  # 총이 바닥에 있고
+        if self.gun_grid[my][mx]:  # 총이 바닥에 있고
             if self.gun[player] == 0:  # 내가 총이 없다면
                 self.gun[player] = self.gun_grid[my][mx].pop()
             else:
@@ -99,10 +97,7 @@ class Main:
         self.init_grid()
         for stage in range(1, self.k + 1):
             self.move()
-            # print(self.gun[1:])
-            # print(self.players)
-            # print(*self.points[1:])
-
+            
         print(*self.points[1:])
 
 
