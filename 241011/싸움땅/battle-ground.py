@@ -33,7 +33,6 @@ class Main:
                     if put_gun:
                         self.gun_grid[my][mx].append(put_gun)
                 break
-        return
 
     def after_fight(self, winner, loser, y, x):
         if self.gun[loser] != 0:
@@ -42,10 +41,12 @@ class Main:
             self.gun_grid[y][x].sort()
         self.move_lose(loser)  # 패자 이동
 
-        if len(self.gun_grid[y][x]) > 0 and 0 < self.gun[winner] < self.gun_grid[y][x][-1]:  # 바닥에 총이 내거보다 좋으면 교환
+        if len(self.gun_grid[y][x]) > 0 and self.gun[winner] < self.gun_grid[y][x][-1]:  # 바닥에 총이 내거보다 좋으면 교환
             put_gun = self.gun[winner]
             self.gun[winner] = self.gun_grid[y][x].pop()
             self.gun_grid[y][x].append(put_gun)
+            self.gun_grid[y][x].sort()
+            # 소트
 
     def fight(self, player, enemy, y, x):
         player_atk = self.players[player][3] + self.gun[player]
@@ -98,6 +99,8 @@ class Main:
         self.init_grid()
         for stage in range(1, self.k + 1):
             self.move()
+            # print(self.gun[1:])
+            # print(self.players)
             # print(*self.points[1:])
 
         print(*self.points[1:])
