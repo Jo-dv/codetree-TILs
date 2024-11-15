@@ -179,12 +179,12 @@ public class Main {
 
     static void solve() {
         initMap();
-
+        int aliveSanta = p;
+        
+        Game:
         for(int turn = 1; turn <= m; turn++) {
-            int aliveSanta = p;
-            Game:
             for(int i = 1; i <= p; i++) {
-                aliveSanta -= alive[i] ? 1 : 0;
+                aliveSanta -= alive[i] ? 0 : 1;
                 if(aliveSanta == 0)
                     break Game;
             }
