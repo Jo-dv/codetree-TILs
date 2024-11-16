@@ -8,5 +8,7 @@ for i in arr:
     if temp < 0:
         answer = max(answer, temp)
         temp = 0
+    else:
+        answer = max(answer, temp)
 
 print(answer)
