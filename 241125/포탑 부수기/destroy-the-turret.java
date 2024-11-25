@@ -15,7 +15,6 @@ public class Main {
 	static int[][] towers;
 	static int[][] recent;
 	static boolean[][] participants;
-	static int survivor = n * m;
 	static int answer = 0;
 
 	public static void main(String[] args) throws IOException {
@@ -168,16 +167,28 @@ public class Main {
 		}
 		participants = new boolean[n][m];
 	}
+	
+	static boolean check_terminate() {
+		int rest_tower = n * m;
+		for(int i = 0; i < n; i++) {
+			for(int j = 0; j < m; j++) {
+				if(towers[i][j] == 0) {
+					rest_tower -= 1;
+				}
+			}
+		}
+		return rest_tower <= 1 ? true : false;
+	}
 
 	static void solve() {
 		int[] attacker, target;
 
 		for (int turn = 1; turn <= k; turn++) {
-			if(survivor == 1)
-				break;
 			attacker = find_attacker();
 			target = find_target();
 			attack(attacker, target, turn);
+			if(check_terminate())
+				break;
 			recover();
 		}
 		for(int[] i: towers)
