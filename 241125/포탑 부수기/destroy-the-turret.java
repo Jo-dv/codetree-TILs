@@ -59,7 +59,7 @@ public class Main {
 		for (int row = 0; row < n; row++) {
 			for (int col = 0; col < m; col++) {
 				if (0 != towers[row][col] && towers[row][col] <= max_atk) {
-					max_atk = towers[col][row];
+					max_atk = towers[row][col];
 					attackers.add(new Tower(row, col, towers[row][col], recent[row][col]));
 				}
 			}
@@ -167,18 +167,6 @@ public class Main {
 		}
 		participants = new boolean[n][m];
 	}
-	
-	static boolean check_terminate() {
-		int rest_tower = n * m;
-		for(int i = 0; i < n; i++) {
-			for(int j = 0; j < m; j++) {
-				if(towers[i][j] == 0) {
-					rest_tower -= 1;
-				}
-			}
-		}
-		return rest_tower <= 1 ? true : false;
-	}
 
 	static void solve() {
 		int[] attacker, target;
@@ -187,8 +175,6 @@ public class Main {
 			attacker = find_attacker();
 			target = find_target();
 			attack(attacker, target, turn);
-			if(check_terminate())
-				break;
 			recover();
 		}
 		for(int[] i: towers)
