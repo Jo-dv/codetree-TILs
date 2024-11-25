@@ -2,7 +2,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -33,50 +36,74 @@ public class Main {
 
 		solve();
 	}
+	
+	static class Tower {
+		int row, col, atk, recent;
 
-	static int[] find_attacker(int turn) {
-		int max_atk = 5001;
-		int attacker_y = 0, attacker_x = 0;
-		int recently_turn = 0;
+		public Tower(int row, int col, int atk, int recent) {
+			this.row = row;
+			this.col = col;
+			this.atk = atk;
+			this.recent = recent;
+		}
 
-		for (int col = n - 1; col >= 0; col--) {
-			for (int row = m - 1; row >= 0; row--) {
-				if (0 < towers[col][row] && towers[col][row] <= max_atk && recently_turn <= recent[col][row]) {
+		@Override
+		public String toString() {
+			return "Tower [row=" + row + ", col=" + col + ", atk=" + atk + ", recent=" + recent + "]";
+		}
+	}
+
+	static int[] find_attacker() {
+		int max_atk = 5000;
+		ArrayList<Tower> attackers = new ArrayList<>();
+
+		for (int row = 0; row < n; row++) {
+			for (int col = 0; col < m; col++) {
+				if (0 != towers[row][col] && towers[row][col] <= max_atk) {
 					max_atk = towers[col][row];
-					recently_turn = recent[col][row];
-					attacker_y = col;
-					attacker_x = row;
+					attackers.add(new Tower(row, col, towers[row][col], recent[row][col]));
 				}
 			}
 		}
+		Collections.sort(attackers, Comparator
+				.comparingInt((Tower o) -> o.atk)
+				.thenComparingInt((o) -> -o.recent)
+				.thenComparingInt((o) -> -(o.row + o.col))
+				.thenComparingInt((o) -> -o.col)
+				);
+		Tower attacker = attackers.get(0);
 
-		towers[attacker_y][attacker_x] += (n + m);
-		recent[attacker_y][attacker_x] = turn;
-		return new int[] { attacker_y, attacker_x };
+		return new int[] { attacker.row, attacker.col };
 	}
 
-	static int[] find_target(int turn) {
-		int min_atk = 1;
-		int target_y = 0, target_x = 0;
-		int recently_turn = turn;
+	static int[] find_target() {
+		int min_atk = 0;
+		ArrayList<Tower> targeters = new ArrayList<>();
 
-		for (int col = 0; col < n; col++) {
-			for (int row = 0; row < m; row++) {
-				if (towers[col][row] >= min_atk && recently_turn >= recent[col][row]) {
-					min_atk = towers[col][row];
-					recently_turn = recent[col][row];
-					target_y = col;
-					target_x = row;
+		for (int row = 0; row < n; row++) {
+			for (int col = 0; col < m; col++) {
+				if (0 != towers[row][col] && towers[row][col] >= min_atk) {
+					min_atk = towers[row][col];
+					targeters.add(new Tower(row, col, towers[row][col], recent[row][col]));
 				}
 			}
 		}
+		Collections.sort(targeters, Comparator
+				.comparingInt((Tower o) -> -o.atk)
+				.thenComparingInt((o) -> o.recent)
+				.thenComparingInt((o) -> o.row + o.col)
+				.thenComparingInt((o) -> o.col)
+				);
+		Tower target = targeters.get(0);
 
-		return new int[] { target_y, target_x };
+		return new int[] { target.row, target.col };
 	}
 
-	static void attack(int[] attacker, int[] target) {
+	static void attack(int[] attacker, int[] target, int turn) {
 		participants[attacker[0]][attacker[1]] = true;
 		participants[target[0]][target[1]] = true;
+		towers[attacker[0]][attacker[1]] += (n + m);
+		recent[attacker[0]][attacker[1]] = turn;
 		if (!laser(attacker, target)) {
 			bomb(attacker, target);
 		}
@@ -120,12 +147,11 @@ public class Main {
 	static void bomb(int[] attacker, int[] target) {
 		int atk = towers[attacker[0]][attacker[1]];
 		towers[target[0]][target[1]] = Math.max(0, towers[target[0]][target[1]] - atk);
-
-		for (int[] d : new int[][] { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 }, { -1, -1 }, { -1, 1 }, { 1, -1 },
-				{ 1, 1 } }) {
+		for (int[] d : new int[][] { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 }, { -1, -1 }, { -1, 1 }, { 1, -1 }, { 1, 1 } }) {
 			int my = (target[0] + d[0] + n) % n;
 			int mx = (target[1] + d[1] + m) % m;
-			if (towers[my][mx] != 0 && attacker[0] != my && attacker[1] != mx) {
+
+			if (towers[my][mx] != 0 && !(attacker[0] == my && attacker[1] == mx)) {
 				towers[my][mx] = Math.max(0, towers[my][mx] - (atk / 2));
 				participants[my][mx] = true;
 			}
@@ -147,14 +173,13 @@ public class Main {
 		int[] attacker, target;
 
 		for (int turn = 1; turn <= k; turn++) {
-//			if(survivor == 1)
-//				break;
-			attacker = find_attacker(turn);
-			target = find_target(turn);
-			attack(attacker, target);
+			if(survivor == 1)
+				break;
+			attacker = find_attacker();
+			target = find_target();
+			attack(attacker, target, turn);
 			recover();
 		}
-		
 		for(int[] i: towers)
 			answer = Math.max(answer, Arrays.stream(i).max().getAsInt());
 		
