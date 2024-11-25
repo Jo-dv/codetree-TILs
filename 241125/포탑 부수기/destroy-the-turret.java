@@ -45,11 +45,6 @@ public class Main {
 			this.atk = atk;
 			this.recent = recent;
 		}
-
-		@Override
-		public String toString() {
-			return "Tower [row=" + row + ", col=" + col + ", atk=" + atk + ", recent=" + recent + "]";
-		}
 	}
 
 	static int[] find_attacker() {
@@ -167,6 +162,18 @@ public class Main {
 		}
 		participants = new boolean[n][m];
 	}
+	
+	static boolean check_terminate() {
+		int rest_tower = n * m;
+		for(int i = 0; i < n; i++) {
+			for(int j = 0; j < m; j++) {
+				if(towers[i][j] == 0) {
+					rest_tower -= 1;
+				}
+			}
+		}
+		return rest_tower <= 1 ? true : false;
+	}
 
 	static void solve() {
 		int[] attacker, target;
@@ -175,6 +182,8 @@ public class Main {
 			attacker = find_attacker();
 			target = find_target();
 			attack(attacker, target, turn);
+			if(check_terminate())
+				break;
 			recover();
 		}
 		for(int[] i: towers)
