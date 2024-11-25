@@ -53,7 +53,7 @@ public class Main {
 
 		for (int row = 0; row < n; row++) {
 			for (int col = 0; col < m; col++) {
-				if (0 != towers[row][col] && towers[row][col] <= max_atk) {
+				if (towers[row][col] != 0 && towers[row][col] <= max_atk) {
 					max_atk = towers[row][col];
 					attackers.add(new Tower(row, col, towers[row][col], recent[row][col]));
 				}
@@ -76,7 +76,7 @@ public class Main {
 
 		for (int row = 0; row < n; row++) {
 			for (int col = 0; col < m; col++) {
-				if (0 != towers[row][col] && towers[row][col] >= min_atk) {
+				if (towers[row][col] != 0 && towers[row][col] >= min_atk) {
 					min_atk = towers[row][col];
 					targeters.add(new Tower(row, col, towers[row][col], recent[row][col]));
 				}
@@ -106,6 +106,8 @@ public class Main {
 	static boolean laser(int[] attacker, int[] target) {
 		int atk = towers[attacker[0]][attacker[1]];
 		int[][][] visited = new int[n][m][2];
+		for(int[][] i: visited)
+			Arrays.fill(i, new int[] {-1, -1});
 		visited[attacker[0]][attacker[1]] = attacker;
 		ArrayDeque<int[]> q = new ArrayDeque<>();
 		q.add(attacker);
@@ -128,7 +130,7 @@ public class Main {
 			for (int[] d : new int[][] { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } }) {
 				int my = (current[0] + d[0] + n) % n;
 				int mx = (current[1] + d[1] + m) % m;
-				if (towers[my][mx] > 0 && visited[my][mx][0] == 0 && visited[my][mx][1] == 0) {
+				if (towers[my][mx] != 0 && visited[my][mx][0] == -1 && visited[my][mx][1] == -1) {
 					q.add(new int[] { my, mx });
 					visited[my][mx] = new int[] { current[0], current[1] };
 				}
