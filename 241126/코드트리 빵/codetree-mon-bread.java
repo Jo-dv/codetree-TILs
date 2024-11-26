@@ -78,7 +78,7 @@ public class Main {
 
 		for(int y = 0; y < n; y++) {
 			for(int x = 0; x < n; x++) {
-				if(map[y][x] == 1 && distance > road[y][x]) {
+				if(map[y][x] == 1 && road[y][x] != 0 && distance > road[y][x]) {
 					distance = road[y][x];
 					man.y = y;
 					man.x = x;
@@ -130,7 +130,7 @@ public class Main {
 	}
 	
 	static void solve() {
-		while(time < 8) {
+		while(true) {
 			time += 1;
 			for(int i = 1; i <= m; i++) {
 				if(arrive[i] || people[i].y == -1 && people[i].x == -1) {  // 편의점에 도착했거나, 아직 베이스켐프가 아니라면
