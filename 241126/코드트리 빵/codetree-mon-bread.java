@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -23,11 +22,6 @@ public class Main {
 		public Pos(int y, int x) {
 			this.y = y;
 			this.x = x;
-		}
-
-		@Override
-		public String toString() {
-			return "Pos [y=" + y + ", x=" + x + "]";
 		}
 	}
 	
@@ -103,7 +97,7 @@ public class Main {
 		
 		for(int[] d: directions) {
 			int my = man.y + d[0], mx = man.x + d[1];
-			if(0 <= my && my < n && 0 <= mx && mx < n && map[my][mx] != -1 && distance > road[my][mx]) {
+			if(0 <= my && my < n && 0 <= mx && mx < n && road[my][mx] != 0 && distance > road[my][mx]) {
 				distance = road[my][mx];
 				final_y = my;
 				final_x = mx;
@@ -121,6 +115,7 @@ public class Main {
 			if(man.y == store.y && man.x == store.x) {
 				arrive[i] = true;
 				map[store.y][store.x] = -1;
+				
 			}
 		}
 	}
@@ -135,7 +130,7 @@ public class Main {
 	}
 	
 	static void solve() {
-		while(true) {
+		while(time < 8) {
 			time += 1;
 			for(int i = 1; i <= m; i++) {
 				if(arrive[i] || people[i].y == -1 && people[i].x == -1) {  // 편의점에 도착했거나, 아직 베이스켐프가 아니라면
@@ -144,15 +139,14 @@ public class Main {
 				go_store(i);
 			}
 			update_info();  // 모든 사람들의 이동이 끝났을 때, 편의점을 막을지 말지 확인해야 함
-			if(check_terminate()) {  // 이 시점에서 종료유무 체크해야 함
+			if(check_terminate()) {  // 종료 유무 체크
 				break;
 			}
-			if(time <= m) {
-				// 사람들을 베이스캠프로
+			if(time <= m) {  // 사람들을 베이스캠프로
 				find_base(time);
 			}
 		}
-		
+
 		System.out.println(time);
 	}
 }
