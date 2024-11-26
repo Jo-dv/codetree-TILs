@@ -130,7 +130,7 @@ public class Main {
 	}
 	
 	static void solve() {
-		while(true) {
+		while(!check_terminate()) {
 			time += 1;
 			for(int i = 1; i <= m; i++) {
 				if(arrive[i] || people[i].y == -1 && people[i].x == -1) {  // 편의점에 도착했거나, 아직 베이스켐프가 아니라면
@@ -139,9 +139,6 @@ public class Main {
 				go_store(i);
 			}
 			update_info();  // 모든 사람들의 이동이 끝났을 때, 편의점을 막을지 말지 확인해야 함
-			if(check_terminate()) {  // 종료 유무 체크
-				break;
-			}
 			if(time <= m) {  // 사람들을 베이스캠프로
 				find_base(time);
 			}
