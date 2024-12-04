@@ -108,7 +108,7 @@ public class Main {
 		}
 	}
 	
-	static void move_player() {
+	static void move_runner() {
 		for(Player runner: runners) {
 			if(!valid_run(runner)) {
 				continue;
@@ -142,30 +142,31 @@ public class Main {
 		return false;
 	}
 	
-	static void catch_player(int turn) {
+	static void catch_runner(int turn) {
 		int catched = 0;
 		int size = runners.size() - 1;
 		int[] d = directions[tagger.d];
 		
 		for(int i = size; i > -1; i--) {
 			Player runner = runners.get(i);
-			if(
-					tagger.y <= runner.y && runner.y <= tagger.y + d[0] * 2 &&
-					tagger.y <= runner.y && runner.x <= tagger.x + d[1] * 2 && 
-					!trees.contains(runner.y + ", " + runner.x)) {
-				runners.remove(i);
-				catched++;
+			for(int distance = 0; distance < 3; distance++) {
+				if(tagger.y + d[0] * distance == runner.y && tagger.x + d[1] * distance == runner.x) {
+					if(!trees.contains(runner.y + ", " + runner.x)) {
+						runners.remove(i);
+						catched++;
+					}
+				}
 			}
 		}
 		
-		answer += (catched) * turn;
+		answer += (catched * turn);
 	}
 
 	static void solve() {
 		for(int turn = 1; turn <= k; turn++) {
-			move_player();
+			move_runner();
 			move_tagger();
-			catch_player(turn);
+			catch_runner(turn);
 		}
 		
 		System.out.println(answer);
