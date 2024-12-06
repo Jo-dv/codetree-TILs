@@ -126,7 +126,6 @@ public class Main {
 		int cnt = 0;  // 잡은 몬스터의 수
 		int[][] final_pos = new int[3][2];  // 최종 위치
 		
-		int max_size = 4; // 맵의 최대 크기
 		for (int[][] d : pack_dir) {
 		    int my1 = packman.y + d[0][0];
 		    int mx1 = packman.x + d[0][1];
@@ -136,16 +135,9 @@ public class Main {
 		    int mx3 = mx2 + d[2][1];
 
 		    if (is_valid(my1, mx1) && is_valid(my2, mx2) && is_valid(my3, mx3)) {
-		        
-		        int pos1 = my1 * max_size + mx1;  // 각 좌표를 1차원으로 매핑
-		        int pos2 = my2 * max_size + mx2;
-		        int pos3 = my3 * max_size + mx3;
-
-		        int bitmask = (1 << pos1) | (1 << pos2) | (1 << pos3);  // 비트마스킹으로 중복 여부 확인
-		        if (Integer.bitCount(bitmask) == 3) { // 3개의 좌표가 모두 다름
-		            int sum = map[my1][mx1] + map[my2][mx2] + map[my3][mx3];
-		            if (sum > cnt) {
-		                cnt = sum;
+		        if ((my1 != my2 || mx1 != mx2) && (my1 != my3 || mx1 != mx3) && (my2 != my3 || mx2 != mx3)) {
+		            if (map[my1][mx1] + map[my2][mx2] + map[my3][mx3] > cnt) {
+		                cnt = map[my1][mx1] + map[my2][mx2] + map[my3][mx3];
 		                final_pos[0] = new int[]{my1, mx1};
 		                final_pos[1] = new int[]{my2, mx2};
 		                final_pos[2] = new int[]{my3, mx3};
