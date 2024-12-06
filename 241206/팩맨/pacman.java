@@ -124,7 +124,8 @@ public class Main {
 	
 	static void move_packman(int turn) {
 		int[][] final_pos = null;  // 최종 위치
-		
+		int max_cnt = 0;
+
 		for (int[][] d : pack_dir) {
 			int cnt = 0;  // 잡은 몬스터의 수
 		    int my1 = packman.y + d[0][0];
@@ -136,8 +137,9 @@ public class Main {
 
 		    if (is_valid(my1, mx1) && is_valid(my2, mx2) && is_valid(my3, mx3)) {
 		        if ((my1 != my3 || mx1 != mx3)) {
-		            if (map[my1][mx1] + map[my2][mx2] + map[my3][mx3] > cnt) {
-		                cnt = map[my1][mx1] + map[my2][mx2] + map[my3][mx3];
+					cnt = map[my1][mx1] + map[my2][mx2] + map[my3][mx3];
+		            if (cnt > max_cnt) {
+		                max_cnt = cnt;
 						final_pos = new int[3][2];
 		                final_pos[0] = new int[]{my1, mx1};
 		                final_pos[1] = new int[]{my2, mx2};
