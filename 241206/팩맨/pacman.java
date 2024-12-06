@@ -140,8 +140,7 @@ public class Main {
             for (int[] move : route) {
                 y += move[0];
                 x += move[1];
-                if (!isValid(y, x)) break;
-                if (visited.add(y * 4 + x)) {
+                if (isValid(y, x) && visited.add(y * 4 + x)) {
                     count += monsters.get(y * 4 + x).size();
                 }
             }
@@ -158,7 +157,7 @@ public class Main {
                 packman.x += move[1];
                 int idx = packman.y * 4 + packman.x;
                 ArrayList<Monster> caught = monsters.get(idx);
-                if (!caught.isEmpty()) {
+                if (caught != null && !caught.isEmpty()) {
                     map[packman.y][packman.x] = 0;
                     for (Monster monster : caught) {
                         corpses.add(new Corpse(monster.y, monster.x, turn + 2));
