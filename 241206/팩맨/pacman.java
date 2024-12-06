@@ -124,7 +124,7 @@ public class Main {
 	
 	static void move_packman(int turn) {
 		int cnt = 0;  // 잡은 몬스터의 수
-		int[][] final_pos = new int[3][2];  // 최종 위치
+		int[][] final_pos = null;  // 최종 위치
 		
 		for (int[][] d : pack_dir) {
 		    int my1 = packman.y + d[0][0];
@@ -138,6 +138,7 @@ public class Main {
 		        if ((my1 != my2 || mx1 != mx2) && (my1 != my3 || mx1 != mx3) && (my2 != my3 || mx2 != mx3)) {
 		            if (map[my1][mx1] + map[my2][mx2] + map[my3][mx3] > cnt) {
 		                cnt = map[my1][mx1] + map[my2][mx2] + map[my3][mx3];
+						final_pos = new int[3][2];
 		                final_pos[0] = new int[]{my1, mx1};
 		                final_pos[1] = new int[]{my2, mx2};
 		                final_pos[2] = new int[]{my3, mx3};
@@ -158,8 +159,10 @@ public class Main {
 				}
 			}
 		}
-		packman.y = final_pos[2][0];
-		packman.x = final_pos[2][1];
+		if(final_pos != null) {
+			packman.y = final_pos[2][0];
+			packman.x = final_pos[2][1];
+		}
 	}
 	
 	static void remove_corpse(int turn) {
