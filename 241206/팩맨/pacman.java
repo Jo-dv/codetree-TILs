@@ -70,6 +70,7 @@ public class Main {
 			mc = Integer.parseInt(st.nextToken()) - 1;
 			md = Integer.parseInt(st.nextToken()) - 1;
 			monsters.get(mr + ", " + mc).add(new Monster(mr, mc, md));
+			map[mr][mc] += 1;
 		}
 		
 		solve();
@@ -84,7 +85,6 @@ public class Main {
 			for(int j = 0; j < 4; j++) {
 				for(Monster monster: monsters.get(i + ", " + j)) {
 					eggs.add(new Monster(monster.y, monster.x, monster.d));  // 몬스터 객체 그대로 넣으면 메모리 복사됨
-					map[i][j] += 1;
 				}
 			}
 		}
@@ -178,6 +178,7 @@ public class Main {
 		for(int i = size; i >= 0; i--) {
 			Monster monster = eggs.remove(i);
 			monsters.get(monster.y + ", " + monster.x).add(monster);
+			map[monster.y][monster.x] += 1;
 		}
 	}
 	
