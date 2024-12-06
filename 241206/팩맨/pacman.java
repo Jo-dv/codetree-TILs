@@ -123,48 +123,41 @@ public class Main {
 	}
 	
 	static void move_packman(int turn) {
-		int max_cnt = 0;  // 잡은 몬스터의 수
+		int cnt = 0;  // 잡은 몬스터의 수
 		int[][] final_pos = null;  // 최종 위치
 		
-		for (int[][] route : pack_dir) {
-			HashSet<Integer> visited = new HashSet<>();
-			int y = packman.y, x = packman.x;
-			int cnt = 0;
-			boolean flag = true;
-			
-			for(int[] step: route) {
-				y += step[0];
-				x += step[1];
-				if(!is_valid(y, x)) {
-					flag = false;
-					break;
-				}
-				if(!visited.contains(y * 4 + x)) {
-					visited.add(y * 4 + x);
-					cnt += monsters.get(y + ", " + x).size();
-				}
-			}
-			
-			if(flag && max_cnt < cnt) {
-				max_cnt = cnt;
-				final_pos = route;
-			}
+		for (int[][] d : pack_dir) {
+		    int my1 = packman.y + d[0][0];
+		    int mx1 = packman.x + d[0][1];
+		    int my2 = my1 + d[1][0];
+		    int mx2 = mx1 + d[1][1];
+		    int my3 = my2 + d[2][0];
+		    int mx3 = mx2 + d[2][1];
+
+		    if (is_valid(my1, mx1) && is_valid(my2, mx2) && is_valid(my3, mx3)) {
+		        if ((my1 != my3 || mx1 != mx3)) {
+		            if (map[my1][mx1] + map[my2][mx2] + map[my3][mx3] > cnt) {
+		                cnt = map[my1][mx1] + map[my2][mx2] + map[my3][mx3];
+						final_pos = new int[3][2];
+		                final_pos[0] = new int[]{my1, mx1};
+		                final_pos[1] = new int[]{my2, mx2};
+		                final_pos[2] = new int[]{my3, mx3};
+		            }
+		        }
+		    }
 		}
 		
-		if(final_pos != null) {
-			for(int[] pos: final_pos) {	
-				packman.y += pos[0];
-				packman.x += pos[1];
-				ArrayList<Monster> caught = monsters.get(packman.y + ", " + packman.x);
-                if (!caught.isEmpty()) {
-                    map[packman.y][packman.x] = 0;
-                    for (Monster monster : caught) {
-                        corpses.add(new Corpse(monster.y, monster.x, turn + 2));
-                        grave[monster.y][monster.x]++;
-                    }
-                    caught.clear();
-                }
+		for(int[] pos: final_pos) {	
+			int y = pos[0], x = pos[1];
+			int size = monsters.get(y + ", " + x).size();
+			monsters.get(y + ", " + x).clear();
+			map[y][x] = 0;
+			for(int i = 0; i < size; i++) {
+				corpses.add(new Corpse(y, x, turn + 2));
+				grave[y][x]++;
 			}
+			packman.y = pos[0];
+			packman.x = pos[1];
 		}
 	}
 	
