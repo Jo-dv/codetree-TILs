@@ -40,12 +40,12 @@ class Main:
 
         current = []
         for r in range(r1, r2):
-            for c in range(self.n - c2, self.n - c1):
-                check = self.grid[c][r]
-                if check != 0 and (c, r) in self.info[check]:
-                    self.info[check].remove((c, r))
-                self.grid[c][r] = num
-                current.append((c, r))
+            for c in range(c1, c2):
+                check = self.grid[r][c]
+                if check != 0 and (r, c) in self.info[check]:
+                    self.info[check].remove((r, c))
+                self.grid[r][c] = num
+                current.append((r, c))
 
         self.check_split(num)
 
@@ -60,15 +60,15 @@ class Main:
 
             if cells:
                 flag = False
-                max_y = max(cells, key=lambda cell: cell[0])[0]  # 가장 아래 y
+                min_y = min(cells, key=lambda cell: cell[0])[0]  # 가장 아래 y
                 min_x = min(cells, key=lambda cell: cell[1])[1]  # 가장 왼쪽 x
 
-                for x in range(self.n):  # 왼쪽부터 오른쪽으로
-                    for y in range(self.n - 1, -1, -1):  # 아래에서 위로
-                        if all(0 <= y - (max_y - cy) < self.n and 0 <= x + (cx - min_x) < self.n and new_grid[y - (max_y - cy)][x + (cx - min_x)] == 0 for cy, cx in cells):
+                for y in range(self.n):  # 왼쪽부터 오른쪽으로
+                    for x in range(self.n):  # 아래에서 위로
+                        if all(0 <= y + (cy - min_y) < self.n and 0 <= x + (cx - min_x) < self.n and new_grid[y + (cy - min_y)][x + (cx - min_x)] == 0 for cy, cx in cells):
                             new_cord = []
                             for cy, cx in cells:
-                                ny = y - (max_y - cy)
+                                ny = y + (cy - min_y)
                                 nx = x + (cx - min_x)
                                 new_grid[ny][nx] = num
                                 new_cord.append((ny, nx))
