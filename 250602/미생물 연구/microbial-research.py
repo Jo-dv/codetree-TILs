@@ -42,14 +42,13 @@ class Main:
         for r in range(r1, r2):
             for c in range(c1, c2):
                 check = self.grid[r][c]
-                if check != 0 and (r, c) in self.info[check]:
+                if check != 0 and check != num:
                     self.info[check].remove((r, c))
                 self.grid[r][c] = num
                 current.append((r, c))
 
         self.check_split(num)
-
-        return current
+        self.info[num] = current
 
     def move_cell(self):
         standards = sorted(self.info.items(), key=lambda i: (-len(i[1]), i[0]))
@@ -60,11 +59,11 @@ class Main:
 
             if cells:
                 flag = False
-                min_y = min(cells, key=lambda cell: cell[0])[0]  # 가장 아래 y
-                min_x = min(cells, key=lambda cell: cell[1])[1]  # 가장 왼쪽 x
+                min_y = min(cells, key=lambda cell: cell[0])[0]
+                min_x = min(cells, key=lambda cell: cell[1])[1]
 
-                for y in range(self.n):  # 왼쪽부터 오른쪽으로
-                    for x in range(self.n):  # 아래에서 위로
+                for y in range(self.n):
+                    for x in range(self.n):
                         if all(0 <= y + (cy - min_y) < self.n and 0 <= x + (cx - min_x) < self.n and new_grid[y + (cy - min_y)][x + (cx - min_x)] == 0 for cy, cx in cells):
                             new_cord = []
                             for cy, cx in cells:
@@ -104,12 +103,12 @@ class Main:
     def solve(self):
         for i in range(self.q):
             cell = self.cells[i]
-            self.info[i+1] = self.inject_cell(cell, i+1)
+            self.inject_cell(cell, i+1)
             self.move_cell()
             self.get_result()
 
-        for i in self.answer:
-            print(i)
+        for i, data in enumerate(self.answer):
+            print(i, data)
 
 
 problem = Main()
