@@ -95,7 +95,7 @@ class Main:
                 while True:
                     y += directions[d][0]
                     x += + directions[d][1]
-                    if y < 0 or y >= self.n or x < 0 or x >= self.n:
+                    if y < 0 or y >= self.n or x < 0 or x >= self.n or energy == 0:
                         break
 
                     if self.food[y][x] == target_food:
@@ -109,10 +109,7 @@ class Main:
                     else:
                         self.believe[y][x] += energy
                         self.food[y][x] |= target_food
-                        energy = 0
                         check.add((y, x))
-
-                    if energy == 0:
                         break
 
     def cal_believe(self):
