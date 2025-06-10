@@ -40,10 +40,10 @@ class Main:
                 if not visited[i][j]:
                     dq = deque([(i, j)])
                     visited[i][j] = True
-                    believe_point = self.believe[i][j]
-                    by, bx = i, j
-                    believer = [(by, bx)]
-                    target_food = self.food[i][j]
+                    believe_point = self.believe[i][j]  # 대표의 신앙심
+                    by, bx = i, j  # 대표의 위치
+                    believer = [(by, bx)]  # 현 그룹의 속한 학생들
+                    target_food = self.food[i][j]  # 현 그룹의 음식
 
                     while dq:
                         y, x = dq.popleft()
@@ -54,22 +54,23 @@ class Main:
                                 dq.append((my, mx))
                                 visited[my][mx] = True
                                 believer.append((my, mx))
-                                if believe_point < self.believe[my][mx] or (believe_point == self.believe[my][mx] and by < my and bx < mx):
+                                if believe_point < self.believe[my][mx]:
                                     believe_point = self.believe[my][mx]
                                     by = my
                                     bx = mx
 
-                    believer.remove((by, bx))  # 대표자 제외
-                    self.believe[by][bx] += len(believer)
+                    self.believe[by][bx] += (len(believer) - 1)
                     for y, x in believer:
+                        if (y, x) == (by, bx):
+                            continue
                         self.believe[y][x] -= 1
 
                     if self.food[by][bx] in [4, 2, 1]:
-                        one.append((self.believe[by][bx], by, bx, believer))
+                        one.append((self.believe[by][bx], by, bx))
                     elif self.food[by][bx] in [6, 5, 3]:
-                        two.append((self.believe[by][bx], by, bx, believer))
+                        two.append((self.believe[by][bx], by, bx))
                     else:
-                        three.append((self.believe[by][bx], by, bx, believer))
+                        three.append((self.believe[by][bx], by, bx))
 
         one.sort(key=lambda i: (-i[0], i[1], i[2]))
         two.sort(key=lambda i: (-i[0], i[1], i[2]))
@@ -80,36 +81,37 @@ class Main:
         self.food: list[[int]]
         groups = [one, two, three]
         directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-        check = set()
+        visited = [[False] * self.n for _ in range(self.n)]
 
         for group in groups:
             for current in group:
-                believe, y, x, _ = current
-                if (y, x) in check:
+                believe, y, x = current
+                if visited[y][x]:
                     continue
                 target_food = self.food[y][x]
                 energy = believe - 1
                 self.believe[y][x] = 1
                 d = believe % 4
+                cy, cx = y, x
 
                 while True:
-                    y += directions[d][0]
-                    x += + directions[d][1]
-                    if y < 0 or y >= self.n or x < 0 or x >= self.n or energy == 0:
+                    cy += directions[d][0]
+                    cx += + directions[d][1]
+                    if cy < 0 or cy >= self.n or cx < 0 or cx >= self.n or energy == 0:
                         break
 
-                    if self.food[y][x] == target_food:
+                    if self.food[cy][cx] == target_food:
                         continue
 
-                    if energy > self.believe[y][x]:
-                        energy -= (self.believe[y][x] + 1)
-                        self.believe[y][x] += 1
-                        self.food[y][x] = target_food
-                        check.add((y, x))
+                    if energy > self.believe[cy][cx]:
+                        energy -= (self.believe[cy][cx] + 1)
+                        self.believe[cy][cx] += 1
+                        self.food[cy][cx] = target_food
+                        visited[cy][cx] = True
                     else:
-                        self.believe[y][x] += energy
-                        self.food[y][x] |= target_food
-                        check.add((y, x))
+                        self.believe[cy][cx] += energy
+                        self.food[cy][cx] |= target_food
+                        visited[cy][cx] = True
                         break
 
     def cal_believe(self):
