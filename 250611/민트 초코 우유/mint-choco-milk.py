@@ -40,10 +40,10 @@ class Main:
                 if not visited[i][j]:
                     dq = deque([(i, j)])
                     visited[i][j] = True
-                    believe_point = self.believe[i][j]  # 대표의 신앙심
+                    target_food = self.food[i][j]  # 현 그룹의 음식
+                    max_believe = self.believe[i][j]  # 대표의 신앙심
                     by, bx = i, j  # 대표의 위치
                     believer = [(by, bx)]  # 현 그룹의 속한 학생들
-                    target_food = self.food[i][j]  # 현 그룹의 음식
 
                     while dq:
                         y, x = dq.popleft()
@@ -54,8 +54,8 @@ class Main:
                                 dq.append((my, mx))
                                 visited[my][mx] = True
                                 believer.append((my, mx))
-                                if believe_point < self.believe[my][mx]:
-                                    believe_point = self.believe[my][mx]
+                                if (max_believe < self.believe[my][mx]) or (max_believe == self.believe[my][mx] and (by > my or (by == my and bx > mx))):
+                                    max_believe = self.believe[my][mx]
                                     by = my
                                     bx = mx
 
@@ -75,11 +75,10 @@ class Main:
         one.sort(key=lambda i: (-i[0], i[1], i[2]))
         two.sort(key=lambda i: (-i[0], i[1], i[2]))
         three.sort(key=lambda i: (-i[0], i[1], i[2]))
-        return one, two, three
+        return [one, two, three]
 
-    def evening(self, one, two, three):
+    def evening(self, groups):
         self.food: list[[int]]
-        groups = [one, two, three]
         directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
         visited = [[False] * self.n for _ in range(self.n)]
 
@@ -88,7 +87,6 @@ class Main:
                 believe, y, x = current
                 if visited[y][x]:
                     continue
-                target_food = self.food[y][x]
                 energy = believe - 1
                 self.believe[y][x] = 1
                 d = believe % 4
@@ -96,21 +94,21 @@ class Main:
 
                 while True:
                     cy += directions[d][0]
-                    cx += + directions[d][1]
+                    cx += directions[d][1]
                     if cy < 0 or cy >= self.n or cx < 0 or cx >= self.n or energy == 0:
                         break
 
-                    if self.food[cy][cx] == target_food:
+                    if self.food[cy][cx] == self.food[y][x]:
                         continue
 
                     if energy > self.believe[cy][cx]:
                         energy -= (self.believe[cy][cx] + 1)
                         self.believe[cy][cx] += 1
-                        self.food[cy][cx] = target_food
+                        self.food[cy][cx] = self.food[y][x]
                         visited[cy][cx] = True
                     else:
                         self.believe[cy][cx] += energy
-                        self.food[cy][cx] |= target_food
+                        self.food[cy][cx] |= self.food[y][x]
                         visited[cy][cx] = True
                         break
 
@@ -130,8 +128,9 @@ class Main:
 
         for _ in range(self.t):
             self.morning()
-            one, two, three = self.lunch()
-            self.evening(one, two, three)
+            groups = self.lunch()
+            self.evening(groups)
+
             self.cal_believe()
 
         for i in self.answer:
