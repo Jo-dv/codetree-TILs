@@ -34,7 +34,7 @@ public class Main {
         r = sc.nextInt() - 1;
         c = sc.nextInt() - 1;
         // Please write your code here.
-        answer = new Answer(-1, -1, -1);
+        answer = new Answer(0, 0, 0);
         for(int i = 0; i < k; i++) {
             if(search()) {
                 r = answer.y;
@@ -43,7 +43,7 @@ public class Main {
                 break;
             }
         }
-        System.out.println((answer.y + 1) + " " + (answer.x + 1));
+        System.out.println((r + 1) + " " + (c + 1));
     }
 
     static boolean search() {
@@ -51,7 +51,7 @@ public class Main {
         ArrayDeque<Node> dq = new ArrayDeque<Node>();
         dq.add(new Node(r, c));
         int value = grid[r][c];
-        answer.value = -1;
+        answer.value = 0;
 
         while(!dq.isEmpty()) {
             Node current = dq.poll();
@@ -67,7 +67,7 @@ public class Main {
                     }
                 }
             }
-            if(answer.value == -1) {
+            if(answer.value == 0) {
                 return false;
             }
         }
