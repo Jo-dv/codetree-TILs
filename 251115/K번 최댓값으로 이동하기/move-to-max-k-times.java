@@ -36,14 +36,17 @@ public class Main {
         // Please write your code here.
         answer = new Answer(-1, -1, -1);
         for(int i = 0; i < k; i++) {
-            search();
-            r = answer.y;
-            c = answer.x;
+            if(search()) {
+                r = answer.y;
+                c = answer.x;
+            } else {
+                break;
+            }
         }
         System.out.println((answer.y + 1) + " " + (answer.x + 1));
     }
 
-    static void search() {
+    static boolean search() {
         boolean[][] visited = new boolean[n][n];
         ArrayDeque<Node> dq = new ArrayDeque<Node>();
         dq.add(new Node(r, c));
@@ -64,7 +67,11 @@ public class Main {
                     }
                 }
             }
-            
+            if(answer.value == -1) {
+                return false;
+            }
         }
+
+        return true;
     }
 }
