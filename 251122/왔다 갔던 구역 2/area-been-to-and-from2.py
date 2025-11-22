@@ -7,9 +7,9 @@ for _ in range(n):
     dir.append(di)
 
 # Please write your code here.
-arr = [0] * 201
-pos = 100
-# 0 ~ 99, 100, 101~200
+arr = [0] * 2001
+pos = 1000
+# 0 ~ 999, 1000, 1001~2000
 
 for step, d in zip(x, dir):
     if d == "L":
