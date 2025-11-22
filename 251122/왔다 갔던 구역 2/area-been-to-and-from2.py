@@ -13,15 +13,13 @@ pos = 1000
 
 for step, d in zip(x, dir):
     if d == "L":
-        dest = pos - step
-        while pos > dest:
-            pos -= 1
-            arr[pos] += 1
+        for i in range(pos, pos-step, -1):
+            arr[i] += 1
+        pos -= step
     else:
-        dest = pos + step
-        while pos < dest:
-            pos += 1
-            arr[pos] += 1
+        for i in range(pos, pos+step):
+            arr[i] += 1
+        pos += step
 
 answer = 0
 for i in arr:
