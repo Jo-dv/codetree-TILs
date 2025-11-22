@@ -13,7 +13,7 @@ pos = 1000
 
 for step, d in zip(x, dir):
     if d == "L":
-        for i in range(pos-step, pos):
+        for i in range(pos-1, pos-step-1, -1):
             arr[i] += 1
         pos -= step
     else:
