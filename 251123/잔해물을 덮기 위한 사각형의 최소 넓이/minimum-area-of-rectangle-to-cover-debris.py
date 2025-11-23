@@ -19,6 +19,9 @@ for y in range(2001):
             min_y = min(min_y, y)
             max_y = max(max_y, y)
 
-y = max_y - min_y + 1
-x = max_x - min_x + 1
-print(y * x)
+if min_x == min_y == 2001 and max_x == max_y == 0:
+    print(0)
+else:
+    y = max_y - min_y + 1
+    x = max_x - min_x + 1
+    print(y * x)
