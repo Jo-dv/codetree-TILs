@@ -7,7 +7,7 @@ cnt = 0
 flag = False
 
 for i in range(n):
-    if i >= 1 and t < arr[i-1] < arr[i]:
+    if (i == 0 and t < arr[i]) or (t < arr[i]):
         cnt += 1
         flag = True
     else:
@@ -15,4 +15,4 @@ for i in range(n):
     
     answer = max(answer, cnt)
 
-print(answer if flag else 0)
+print(answer-1)
