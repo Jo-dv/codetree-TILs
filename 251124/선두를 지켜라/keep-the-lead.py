@@ -17,8 +17,8 @@ for _ in range(m):
     t2.append(ti)
 
 # Please write your code here.
-table_a = [0] * 100001
-table_b = [0] * 100001
+table_a = [0] * 1000001
+table_b = [0] * 1000001
 
 time = 1
 for i in range(n):
