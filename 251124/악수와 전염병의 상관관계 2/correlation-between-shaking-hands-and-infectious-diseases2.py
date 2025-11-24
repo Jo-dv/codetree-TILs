@@ -16,6 +16,9 @@ for t, x, y in handshakes:
             if not status[y]:
                 status[y] = 1
                 table[y] = K
+            else:
+                if table[y] > 0:
+                    table[y] -= 1
             table[x] -= 1
 
 print(answer.join(str(i) for i in status[1:]))
