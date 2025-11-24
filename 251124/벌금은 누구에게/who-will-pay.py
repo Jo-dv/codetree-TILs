@@ -9,3 +9,5 @@ for i in student:
     if info[i] >= K:
         print(i)
         break
+else:
+    print(-1)
