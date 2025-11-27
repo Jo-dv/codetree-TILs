@@ -23,7 +23,7 @@ while pos != k:
 # 레이저 발사
 answer = 0
 directions = [(1, 0), (0, -1), (-1, 0), (0, 1)]
-d = pos // 4
+d = pos // n
 dy, dx = directions[d]
 
 while True:
