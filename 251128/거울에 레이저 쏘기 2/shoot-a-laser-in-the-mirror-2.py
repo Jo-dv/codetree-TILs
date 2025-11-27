@@ -24,13 +24,13 @@ while pos != k:
 answer = 0
 directions = [(1, 0), (0, -1), (-1, 0), (0, 1)]
 d = pos // 4
+dy, dx = directions[d]
 
 while True:
     if y < 0 or y >= n or x < 0 or x >= n:
-        print(answer+1)
+        print(answer)
         break
-    dy, dx = directions[d]
-
+    
     if grid[y][x] == "/":
         dy, dx = -dx, -dy
     else:
