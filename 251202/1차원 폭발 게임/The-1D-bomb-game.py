@@ -5,7 +5,7 @@ numbers = [int(input()) for _ in range(n)]
 while True:
     temp = []
     low = 0
-    high = 1
+    high = 0
     while high < len(numbers):
         if numbers[low] == numbers[high]:
             high += 1
