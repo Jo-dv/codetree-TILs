@@ -44,7 +44,7 @@ public static void search(int prev, int nxt, int cnt, int distance) {
             arr[i] = node;
         }
 
-        for(int i = 1; i < n; i++) {
+        for(int i = 1; i <= 2 && i < n; i++) {
             int initial_dist = Math.abs(arr[0].x - arr[i].x) + Math.abs(arr[0].y - arr[i].y);
             search(0, i, 2, initial_dist);
         }
